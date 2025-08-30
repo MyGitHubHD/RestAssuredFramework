@@ -16,4 +16,20 @@ public class GoRestClient {
     public Response getUser(long id){
         return given().spec(spec).when().get(Routes.user(id));
     }
+
+    public Response createUser(Object body){
+        return given().spec(spec).body(body).when().post(Routes.USERS);
+    }
+
+    public Response createUserWithoutAuth(Object body){
+        return given().spec(spec).header("Authorization","").body(body).when().post(Routes.USERS);
+    }
+
+    public Response updateUserPatch(long id, Object body){
+        return given().spec(spec).body(body).when().patch(Routes.user(id));
+    }
+
+    public Response deleteUser(long id){
+        return given().spec(spec).when().delete(Routes.user(id));
+    }
 }
