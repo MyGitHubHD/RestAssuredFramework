@@ -1,23 +1,29 @@
 package automation.utils;
 
-import java.util.HashMap;
+import automation.models.User;
+
 import java.util.Map;
 
-public class UserDataFactory {
+public final class UserDataFactory {
+    private UserDataFactory(){}
 
-    public static Map<String,Object> newUser(String namePrefix, String gender, String status){
-        Map<String,Object> body = new HashMap<>();
-        body.put("name", namePrefix + System.currentTimeMillis());
-        body.put("email", "user" + System.currentTimeMillis() + "@example.com");
-        body.put("gender", gender);
-        body.put("status", status);
-        return body;
+    public static User validUser(){
+        return new User("Test User", Unique.email("user."), "male", "active");
     }
 
-    public static Map<String,Object> updateUser(String newName, String newStatus){
-        Map<String,Object> patch = new HashMap<>();
-        patch.put("name", newName);
-        patch.put("status", newStatus);
-        return patch;
+    public static User inactiveUser(){
+        return new User("Inactive User", Unique.email("inactive."), "male", "inactive");
+    }
+
+    public static User invalidMissingEmail(){
+        return new User("Missing Email", null, "female", "active");
+    }
+
+    public static User fromMap(Map<String, String> m){
+        String name   = m.getOrDefault("name", "Gen User");
+        String email  = m.getOrDefault("email", Unique.email("user."));
+        String gender = m.getOrDefault("gender", "male");
+        String status = m.getOrDefault("status", "active");
+        return new User(name, email, gender, status);
     }
 }
